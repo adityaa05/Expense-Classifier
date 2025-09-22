@@ -7,16 +7,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
-      - key: PORT
-        value: 10000
     healthCheckPath: /predict
     autoDeploy: true
     branch: main
     rootDir: .
 
-  - type: web
+  - type: static
     name: expense-classifier-frontend
-    env: static
     buildCommand: cd expense-classifier-frontend && npm ci && npm run build
     publishPath: expense-classifier-frontend/build
     envVars:
