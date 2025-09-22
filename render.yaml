@@ -12,10 +12,11 @@ services:
     branch: main
     rootDir: .
 
-  - type: static
+  - type: web
     name: expense-classifier-frontend
+    env: static
     buildCommand: cd expense-classifier-frontend && npm ci && npm run build
-    publishPath: expense-classifier-frontend/build
+    staticPublishPath: expense-classifier-frontend/build
     envVars:
       - key: NODE_VERSION
         value: 18.17.0
