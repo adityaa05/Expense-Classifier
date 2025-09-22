@@ -1,9 +1,7 @@
 services:
-  # Backend API Service
   - type: web
     name: expense-classifier-api
     env: python
-    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --bind 0.0.0.0:$PORT backend.api:app
     envVars:
@@ -16,13 +14,11 @@ services:
     branch: main
     rootDir: .
 
-  # Frontend Service
   - type: web
     name: expense-classifier-frontend
     env: static
-    plan: free
-    buildCommand: cd expense-classifier-frontend && npm install && npm run build
-    staticPublishPath: expense-classifier-frontend/build
+    buildCommand: cd expense-classifier-frontend && npm ci && npm run build
+    publishPath: expense-classifier-frontend/build
     envVars:
       - key: NODE_VERSION
         value: 18.17.0
