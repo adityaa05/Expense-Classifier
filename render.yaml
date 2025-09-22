@@ -1,0 +1,44 @@
+services:
+  # Backend API Service
+  - type: web
+    name: expense-classifier-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT backend.api:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.18
+      - key: PORT
+        value: 10000
+    healthCheckPath: /predict
+    autoDeploy: true
+    branch: main
+    rootDir: .
+
+  # Frontend Service
+  - type: web
+    name: expense-classifier-frontend
+    env: static
+    plan: free
+    buildCommand: cd expense-classifier-frontend && npm install && npm run build
+    staticPublishPath: expense-classifier-frontend/build
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+    autoDeploy: true
+    branch: main
+    rootDir: .
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /static/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
